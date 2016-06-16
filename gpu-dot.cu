@@ -42,9 +42,22 @@ int main(int argc, char const *argv[])
     cudaMemcpy(y_, y, sz, cudaMemcpyHostToDevice);
 
     /* Run the dot calculation on the device using CUBLAS */
-    cublasDdot(h, nvals, x_, 1, y_, 1, &result);
+    int cublasReturn = cublasDdot(h, nvals, x_, 1, y_, 1, &result);
 
     /* Print result */
+	if (cublasReturn == CUBLAS_STATUS_SUCCESS)
+		printf("CUBLAS_STATUS_SUCCESS\n");
+	else if (cublasReturn == CUBLAS_STATUS_NOT_INITIALIZED)
+		printf("CUBLAS_STATUS_NOT_INITIALIZED\n");
+	else if (cublasReturn == CUBLAS_STATUS_ALLOC_FAILED)
+		printf("CUBLAS_STATUS_ALLOC_FAILED\n");
+	else if (cublasReturn == CUBLAS_STATUS_ARCH_MISMATCH)
+		printf("CUBLAS_STATUS_ARCH_MISMATCH\n");
+	else if (cublasReturn == CUBLAS_STATUS_EXECUTION_FAILED)
+		printf("CUBLAS_STATUS_EXECUTION_FAILED\n");
+	else
+		printf("Invalid cublas response.\n");
+	
     printf("%.3f\n", result);
 
     return 0;
