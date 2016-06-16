@@ -31,7 +31,16 @@ int main(int argc, char const *argv[])
 
     /* Create the CUBLAS library context */
     cublasHandle_t h;
-    cublasCreate(&h);
+    int cublasCreateRV = cublasCreate(&h);
+	
+	if (cublasCreateRV == CUBLAS_STATUS_NOT_INITIALIZED)
+		printf("CUBLAS_STATUS_NOT_INITIALIZED\n");
+	else if (cublasCreateRV == CUBLAS_STATUS_SUCCESS)
+		printf("CUBLAS_STATUS_SUCCESS\n");
+	else if (cublasCreateRV == CUBLAS_STATUS_ALLOC_FAILED)
+		printf("CUBLAS_STATUS_ALLOC_FAILED\n");
+	else
+		printf("Invalid cublasCreate return value.\n");
 
     /* Allocate memory for both vectors on the device */
     cudaMalloc( (void **)(&x_), sz);
